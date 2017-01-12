@@ -1,5 +1,104 @@
 LIST OF CHANGES
 
+release 50.12
+  - seqchksum_merge.pl
+      updated to generate chksums on the fly is given a bam file
+      added new column class (partition) to partition data when merging.
+      modified and extended tests. N.B. running the script on multiple bam files 
+      should generate the same values as bamcat + bamseqchksum but the
+      order is no longer guaranteed to be the same
+  - RefMaker: added extra dict symlink for RNA SeQc
+  - code changes to reduce number of warnings under Perl 5.22.2
+  
+release 50.11
+  - RefMaker: added function for longranger mkref and extended test
+
+release 50.10
+  - RefMaker: generate blat 2bit genome references
+  - bam_alignment.pl: enforce to have id_run and position defined. It's
+    needed to create an old-style bamflagstats autoqc result object, see
+    https://github.com/wtsi-npg/npg_qc/pull/342.
+
+release 50.9
+  - fix bug that causes the symlink of the .fa file in the bowtie2
+    directory to point to the wrong location
+
+release 50.8
+  - replace bamcheck file by 2x filtered samtools stats files
+
+release 50.7
+  - bam alignment:
+      remove redundant not_strip_bam_tag flag
+      remove do_markduplicates flag and always call mark duplicates
+  - bam mark duplicates:
+      drop replace_file flag, always run file moves
+      derive metrics_file attribute from teh output file name and then rename the file
+      to be forward compatible with pending changes in bam_flagstats, call bam_flagstats
+        parser via top-level execute() method ot be forward compatible
+      bam_flagstats check is serialized in the same way as it is done in post-p4 flow
+
+release 50.6
+  - mark duplicates:
+      - tag stripper is not used any longer - remove code and
+        remove option
+      - stop using Picard estimate library complexity since
+        it is not used in p4 flows, remove option
+      - do not check paths of live tools in tests
+      - subset attribute replaces human_split
+      - drop sort_input option since input is always gets sorted
+  - seq alignment:
+      - remove dependency on the autoqc wrapper object
+      - drop not_strip_bam_tag, no_estimate_library_complexity and
+        sort_input command line options when calling duplicates
+        marking script
+      - use subset option instead of human_split option when calling
+        duplicates marking split
+
+release 50.5
+  - removed unused modules and scripts
+  - use 'subset' option when creating bam_flagstats result object
+
+release 50.4
+  - Ref maker - stop supporting gcbias check, ie do not run gcn_maker
+  - Removing file_finder now functionality lives in seq_qc.
+  - Cleaning code from old Google deps.
+
+release 50.3
+  - call to bam_input replaced by correct call to input_bam
+
+release 50.2
+  - BAM_MarkDuplicate.pm: fixed reference for bamseqchksum command
+  - BAM_MarkDuplicate.pm: forward compatibility with extended bam_flagstats
+      autoqc objects
+  - remove unused code
+
+release 50.1
+  - added bin/seqchksum_merge.pl script - merges output files produced by bamseqchksum
+
+release 50.0
+  - BAM_MarkDuplicate.pm - add cram index generation for aligned data
+  - use ForkManager
+
+release 49.11
+  - compare seqhcksum from generated bam and cram
+
+release 49.10
+  - BAM_Alignment.pm pass a reference to the phix markduplicates command
+  - BAM_MarkDuplicate.pm did not create cram files if the bam file was aligned
+    but no reference was defined. For phix no reference was passed to the
+    markduplicates command so no cram files were created.
+
+release 49.9
+  - reference added to bamseqchecksum in BAM_MarkDuplicate for aligned data
+  - new test bam added for aligned data for correct CRAM file generation
+
+release 49.8
+  - $BWA_ALGORITHM_CUTOFF changed to 1_200_000_000 as smaller genomes than size 1.8Gb
+    have been found to need to use the bwtsw algorithm to index successfully 
+  - BAM_MarkDuplicate.pm and test modified to create cram files for un-aligned data,
+    md5sum and bamseqchksums generated with all crams
+  - un-aligned subset bam added to test data
+
 release 49.7
   - ensure correct reference is passed to markduplicates command
 
